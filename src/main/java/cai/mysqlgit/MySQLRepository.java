@@ -114,7 +114,7 @@ public class MySQLRepository {
 			String DBandTableDir = this.basePathStr + "/" + databaseName + "/" + tableName;
 			// FileUtils.createDir(DBandTableDir);
 			// org.apache.commons.io.FileUtils
-			String tableSQLStr = MySQLUtils.getTableSql(databaseName, tableName);
+			String tableSQLStr = MySQLUtils.getCurrentTableSql(databaseName, tableName);
 			File sqlFile = new File(DBandTableDir + "/" + tableName + ".sql");
 			try {
 				FileUtils.writeStringToFile(sqlFile, tableSQLStr, "UTF-8");
@@ -130,7 +130,7 @@ public class MySQLRepository {
 		try {
 			FileUtils.deleteDirectory(new File(this.basePathStr + "/" + databaseName));
 			// get tables name
-			ArrayList<String> tableNameList = MySQLUtils.getTablesByDatabaseName(databaseName);
+			ArrayList<String> tableNameList = MySQLUtils.getCurrentTableNames(databaseName);
 			this.saveTablesSQL(tableNameList, databaseName);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -195,7 +195,7 @@ public class MySQLRepository {
 					.setMessage(commitMessage)
 					.call();
 		} catch (NoHeadException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch blockxx
 			e.printStackTrace();
 		} catch (NoMessageException e) {
 			// TODO Auto-generated catch block

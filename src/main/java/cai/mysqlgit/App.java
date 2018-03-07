@@ -1,15 +1,25 @@
 package cai.mysqlgit;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import cai.mysqlgit.entity.DataBase;
+import cai.mysqlgit.entity.DataBaseVersion;
+import cai.mysqlgit.utils.MySQLUtils;
 
 public class App {
 	public static void main(String[] args) {
 		long startTime = System.currentTimeMillis();
-		MySQLRepository msr = new MySQLRepository();
-		msr.openRepository();
-		ArrayList<String> latest2Commits = msr.getLatest2Commits();
-//		msr.diffFilesOf2Commits( latest2Commits.get(1),latest2Commits.get(0));
-		msr.fileInDiffOf2Commits(latest2Commits.get(1),latest2Commits.get(0),"souche_dfc/app_splash_screen_inc_bak/app_splash_screen_inc_bak.sql");
+		String databaseName = "souche_dfc";
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String versionInfo = "app_splash_screen_inc_bak add table app_splash_screen_bak_copy:" + sdf.format(c.getTime());
+		DataBase dataBase = MySQLUtils.getCurrentDatabase(databaseName);
+		DataBaseVersion dataBaseVersion = MySQLUtils.createDatabaseVersion(versionInfo);
+		// sava version info
+		MySQLUtils.saveDatabaseVersion(dataBaseVersion);
+		dataBaseVersion = MySQLUtils.getLatestDatabaseVersion();
+		MySQLUtils.saveDatabase(dataBase, dataBaseVersion);
 		long endTime = System.currentTimeMillis();
 		System.out.println("运行时间：" + (endTime - startTime) + "ms");
 	}
